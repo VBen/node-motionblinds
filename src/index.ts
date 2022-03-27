@@ -279,17 +279,9 @@ export class MotionGateway extends EventEmitter {
     const recvSocket = (this.recvSocket = dgram.createSocket({ type: 'udp4', reuseAddr: true }))
 
     recvSocket.on('listening', () => {
-      try {
-        if (this.multicastInterface) {
-          recvSocket.setMulticastInterface(this.multicastInterface)
-        }
-        recvSocket.addMembership(MULTICAST_IP, this.multicastInterface)
-        recvSocket.setBroadcast(true)
-        recvSocket.setMulticastTTL(128)
-      } catch (err) {
-        this.emit('error', err)
-        this.stop()
-      }
+ 
+      recvSocket.setMulticastTTL(128)
+
     })
 
     recvSocket.on('error', err => {
@@ -319,7 +311,18 @@ export class MotionGateway extends EventEmitter {
       }
     })
 
-    recvSocket.bind(UDP_PORT_RECEIVE, MULTICAST_IP)
+    recvSocket.bind(UDP_PORT_RECEIVE, () => {
+       try {
+        if (this.multicastInterface) {
+          recvSocket.setMulticastInterface(this.multicastInterface)
+        }
+        recvSocket.addMembership(MULTICAST_IP, this.multicastInterface)
+        recvSocket.setBroadcast(true)
+      } catch (err) {
+        this.emit('error', err)
+        this.stop()
+      }
+    })
   }
 
   stop() {
