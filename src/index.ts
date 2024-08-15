@@ -247,7 +247,7 @@ export class MotionGateway extends EventEmitter {
   start() {
     this.sendSocket = dgram.createSocket({ type: 'udp4', reuseAddr: true })
 
-    this.sendSocket.on('error', err => {
+    this.sendSocket.on('error', (err) => {
       if (this.callbacks.size) {
         this.callbacks.forEach((callback, _) => callback(err, undefined))
       } else {
@@ -279,12 +279,10 @@ export class MotionGateway extends EventEmitter {
     const recvSocket = (this.recvSocket = dgram.createSocket({ type: 'udp4', reuseAddr: true }))
 
     recvSocket.on('listening', () => {
- 
       recvSocket.setMulticastTTL(128)
-
     })
 
-    recvSocket.on('error', err => {
+    recvSocket.on('error', (err) => {
       this.emit('error', err)
     })
 
@@ -312,7 +310,7 @@ export class MotionGateway extends EventEmitter {
     })
 
     recvSocket.bind(UDP_PORT_RECEIVE, () => {
-       try {
+      try {
         if (this.multicastInterface) {
           recvSocket.setMulticastInterface(this.multicastInterface)
         }
@@ -347,8 +345,8 @@ export class MotionGateway extends EventEmitter {
     const devices = await this.getDeviceList()
     return Promise.all(
       devices.data
-        .filter(d => d.deviceType !== DEVICE_TYPE_GATEWAY)
-        .map(d => this.readDevice(d.mac, d.deviceType))
+        .filter((d) => d.deviceType !== DEVICE_TYPE_GATEWAY)
+        .map((d) => this.readDevice(d.mac, d.deviceType))
     )
   }
 
@@ -395,26 +393,11 @@ export class MotionGateway extends EventEmitter {
     const date = new Date()
     const yyyy = date.getFullYear()
     const MM = (date.getMonth() + 1).toString().padStart(2, '0')
-    const dd = date
-      .getDate()
-      .toString()
-      .padStart(2, '0')
-    const hh = date
-      .getHours()
-      .toString()
-      .padStart(2, '0')
-    const mm = date
-      .getMinutes()
-      .toString()
-      .padStart(2, '0')
-    const ss = date
-      .getSeconds()
-      .toString()
-      .padStart(2, '0')
-    const sss = date
-      .getMilliseconds()
-      .toString()
-      .padStart(3, '0')
+    const dd = date.getDate().toString().padStart(2, '0')
+    const hh = date.getHours().toString().padStart(2, '0')
+    const mm = date.getMinutes().toString().padStart(2, '0')
+    const ss = date.getSeconds().toString().padStart(2, '0')
+    const sss = date.getMilliseconds().toString().padStart(3, '0')
     let messageIdStr = `${yyyy}${MM}${dd}${hh}${mm}${ss}${sss}`
 
     // Ensure this messageId is greater than the last sent one
@@ -434,14 +417,8 @@ export class MotionGateway extends EventEmitter {
     const cipher = crypto.createCipheriv('aes-128-ecb', key, null)
     cipher.setAutoPadding(false)
     return (
-      cipher
-        .update(token)
-        .toString('hex')
-        .toUpperCase() +
-      cipher
-        .final()
-        .toString('hex')
-        .toUpperCase()
+      cipher.update(token).toString('hex').toUpperCase() +
+      cipher.final().toString('hex').toUpperCase()
     )
   }
 

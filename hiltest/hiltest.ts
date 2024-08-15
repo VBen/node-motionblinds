@@ -48,7 +48,7 @@ describe('MotionGateway', () => {
     gw.on('error', fail)
     gw.start()
     const devices = await gw.readAllDevices()
-    const allBlinds = devices.filter(d => d.deviceType === MotionGateway.Blind)
+    const allBlinds = devices.filter((d) => d.deviceType === MotionGateway.Blind)
     expect(allBlinds).not.toHaveLength(0)
 
     // Close all blinds
@@ -61,7 +61,7 @@ describe('MotionGateway', () => {
     }
 
     // Wait for blinds to start closing, if they are not already closed
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise((resolve) => setTimeout(resolve, 2000))
 
     // Stop all blinds
     for (const blinds of allBlinds) {
@@ -82,7 +82,7 @@ describe('MotionGateway', () => {
     }
 
     // Wait for blinds to start opening
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     let logMessage = `gatewayIp=${gw.seenGatewayIp}`
 
