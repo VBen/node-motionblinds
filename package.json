@@ -32,7 +32,7 @@
   },
   "name": "@vben19/motionblinds",
   "author": "Benjamin V (VBen)",
-  "homepage": "https://github.com/jhurliman/node-motionblinds",
+  "homepage": "https://github.com/VBen/node-motionblinds",
   "module": "dist/motionblinds.esm.js",
   "devDependencies": {
     "@types/jest": "^27.5.0",
